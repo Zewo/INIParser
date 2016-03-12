@@ -5,7 +5,7 @@ public enum Errors : ErrorType {
     case ParseError
 }
 
-class Section {
+public class Section {
     let name: String
     var options: [String: String] = [:]
     init(_ name: String){
@@ -21,13 +21,13 @@ class Section {
         }
         options[parts[0].trim()] = parts[1].trim()
     }
-    func get(option: String) -> String? {
+    public func get(option: String) -> String? {
         return options[option]
     }
-    subscript(option: String) -> String? {
+    public subscript(option: String) -> String? {
         return self.get(option)
     }
-    func getBool(option: String) -> Bool? {
+    public func getBool(option: String) -> Bool? {
         guard let option = self.get(option) else {
             return nil
         }
@@ -41,13 +41,13 @@ class Section {
         }
         
     }
-    func getInt(option: String) -> Int? {
+    public func getInt(option: String) -> Int? {
         guard let option = self.get(option) else {
             return nil
         }
         return Int(option)
     }
-    func getFloat(option: String) -> Float? {
+    public func getFloat(option: String) -> Float? {
         guard let option = self.get(option) else {
             return nil
         }
@@ -56,7 +56,7 @@ class Section {
     }
 }
 extension Section: CustomStringConvertible {
-    var description: String {
+    public var description: String {
         return self.options.description
     }
 }
@@ -65,8 +65,9 @@ extension Section: CustomStringConvertible {
 public class INIParser {
     private var last_section: Section?
     private var sections: [String: Section] = [:]
-    
-    func read(pathes: String...) throws {
+    public init(){
+    }
+    public func read(pathes: String...) throws {
         for path in pathes {
             let file = try File(path: path)
             let content = try file.read()
@@ -75,9 +76,9 @@ public class INIParser {
         }
         
     }
-    func parse(text: String) throws {
+    public func parse(text: String) throws {
         last_section = nil
-        let lines = text.split("\n")
+        let lines = text.split("\r\n")
         for line in lines {
             let line = line.trim()
             if line.isEmpty || line.startsWith(";") || line.startsWith("#"){
@@ -103,13 +104,13 @@ public class INIParser {
     }
     
     
-    func get(section: String, option: String) -> String? {
+    public func get(section: String, option: String) -> String? {
         return sections[section]?[option]
     }
-    func get(section: String) -> Section? {
+    public func get(section: String) -> Section? {
         return sections[section]
     }
-    subscript(section: String) -> Section? {
+    public subscript(section: String) -> Section? {
         return self.get(section)
     }
 }
