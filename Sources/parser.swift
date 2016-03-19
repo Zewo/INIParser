@@ -85,7 +85,7 @@ public class INIParser {
                 continue
             }
             if line.starts(with: "[") {
-                guard line.endsWith("]") else {
+                guard line.ends(with: "]") else {
                     throw Errors.ParseError
                 }
                 let section_name = line.trim(["[", "]"])
