@@ -1,7 +1,7 @@
 
 import File
 
-public enum Errors : ErrorType {
+public enum Errors : ErrorProtocol {
     case ParseError
 }
 
@@ -15,7 +15,7 @@ public class Section {
         let line = line.trim()
         var parts: [String]
         if line.contains("=") {
-            parts = line.split("=", maxSplit: 1)
+            parts = line.split("=", maxSplits: 1)
         } else {
             throw Errors.ParseError
         }
@@ -81,10 +81,10 @@ public class INIParser {
         let lines = text.split("\r\n")
         for line in lines {
             let line = line.trim()
-            if line.isEmpty || line.startsWith(";") || line.startsWith("#"){
+            if line.isEmpty || line.starts(with: ";") || line.starts(with: "#"){
                 continue
             }
-            if line.startsWith("[") {
+            if line.starts(with: "[") {
                 guard line.endsWith("]") else {
                     throw Errors.ParseError
                 }
