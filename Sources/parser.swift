@@ -11,24 +11,24 @@ public class Section {
     init(_ name: String){
         self.name = name
     }
-    func add_option(line: String) throws {
+    func add_option(_ line: String) throws {
         let line = line.trim()
         var parts: [String]
         if line.contains("=") {
-            parts = line.split("=", maxSplits: 1)
+            parts = line.split(separator: "=", maxSplits: 1)
         } else {
             throw Errors.ParseError
         }
         options[parts[0].trim()] = parts[1].trim()
     }
-    public func get(option: String) -> String? {
+    public func get(_ option: String) -> String? {
         return options[option]
     }
     public subscript(option: String) -> String? {
         return self.get(option)
     }
-    public func getBool(option: String) -> Bool? {
-        guard let option = self.get(option) else {
+    public func get(_ option: String) -> Bool? {
+        guard let option: String = self.get(option) else {
             return nil
         }
         switch option {
@@ -41,14 +41,14 @@ public class Section {
         }
         
     }
-    public func getInt(option: String) -> Int? {
-        guard let option = self.get(option) else {
+    public func get(_ option: String) -> Int? {
+        guard let option: String = self.get(option) else {
             return nil
         }
         return Int(option)
     }
-    public func getFloat(option: String) -> Float? {
-        guard let option = self.get(option) else {
+    public func get(_ option: String) -> Float? {
+        guard let option: String = self.get(option) else {
             return nil
         }
         return Float(option)
@@ -67,18 +67,18 @@ public class INIParser {
     private var sections: [String: Section] = [:]
     public init(){
     }
-    public func read(pathes: String...) throws {
+    public func read(_ pathes: String...) throws {
         for path in pathes {
             let file = try File(path: path)
-            let content = try file.read()
+            let content = try file.readAllBytes()
             let text = String(content)
             try parse(text)
         }
         
     }
-    public func parse(text: String) throws {
+    public func parse(_ text: String) throws {
         last_section = nil
-        let lines = text.split("\r\n")
+        let lines = text.split(separator: "\r\n")
         for line in lines {
             let line = line.trim()
             if line.isEmpty || line.starts(with: ";") || line.starts(with: "#"){
@@ -104,10 +104,10 @@ public class INIParser {
     }
     
     
-    public func get(section: String, option: String) -> String? {
+    public func get(_ section: String, option: String) -> String? {
         return sections[section]?[option]
     }
-    public func get(section: String) -> Section? {
+    public func get(_ section: String) -> Section? {
         return sections[section]
     }
     public subscript(section: String) -> Section? {
